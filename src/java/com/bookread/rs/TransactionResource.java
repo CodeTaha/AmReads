@@ -61,11 +61,13 @@ public class TransactionResource {
     
     /**
      * Retrieves representation of an instance of com.bookread.rs.TransactionResource
+     * @param activation_url
      * @param client_id
      * @param client_secret
      * @param amount
      * @param redirect_url
      * @return an instance of java.lang.String
+     * @throws java.security.NoSuchAlgorithmException
      */
     @GET
     @Path("/getTransaction/{activation_url}")
@@ -73,11 +75,29 @@ public class TransactionResource {
     public String getTransaction(@PathParam("activation_url") String activation_url) throws NoSuchAlgorithmException {
         
         System.out.println("ci="+activation_url);
-        //Models model=new Models();
-        
-        return "{\"transaction_url\":\""+activation_url+"\"}";
+        Models model=new Models();
+        return model.getTransactionData(activation_url);
+        //return "{\"transaction_url\":\""+activation_url+"\"}";
     }
-
+    
+    /**
+     * Retrieves representation of an instance of com.bookread.rs.TransactionResource
+     * @param trans_id
+     * @param trans_details
+     * @return an instance of java.lang.String
+     * @throws java.security.NoSuchAlgorithmException
+     */
+    @POST
+    @Path("/completeTransaction/{trans_id}")
+    @Produces("application/json")
+    public String completeTransaction(@PathParam("trans_id") int trans_id,
+            @DefaultValue("{\"trans_details\":0}") @QueryParam("trans_details") String trans_details) throws NoSuchAlgorithmException {
+        System.out.println("trans_details"+trans_details);
+        Models model=new Models();
+        String transaction_url=model.commitTransaction(trans_id);
+        System.out.println("trans_url"+transaction_url);
+        return transaction_url;
+    }
     /**
      * PUT method for updating or creating an instance of TransactionResource
      * @param content representation for the resource

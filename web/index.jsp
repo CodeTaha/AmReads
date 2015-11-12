@@ -20,24 +20,54 @@
         <%
         } else {
         %>
-        <h1>Hello World!</h1>
+        <h1>Welcome to AmReads Transaction Gateway!</h1>
         <p><%= trans %></p>
         <div id="main"></div>
         <script src="js/jquery.min.js"></script>
         <script>
             var act_url="<%= trans %>";
             console.log(act_url);
-            $.ajax({
-                url: "http://localhost:8084/BookRead/webresources/transaction/getTransaction/t0ddg9u8bkn2qqnhg276tqosnf",
-                type: "get", //send it through get method
-                success: function(response) {
-                    console.log("Taha ur Awesome",response);
-                  //Do Something
-                },
-                error: function(xhr) {
-                  //Do Something to handle error
-                }
+            var data;
+            $(document).ready(function() {
+                $.ajax({
+                    url: "http://localhost:8084/BookRead/webresources/transaction/getTransaction/"+act_url,
+                    type: "GET", //send it through get method
+                    success: function(response) {
+                        console.log("Taha ur Awesome",response);
+                        data=response;
+                        if(data.flag==1) {
+                            $("#main").append("<h3>Sorry this transaction does not exist, please contact your merchant</h3>");
+                        } else {
+                            $("#main").append("Press ok to pay $"+data.amount+" to "+data.client_id);
+                            $("#main").append("</br><button onclick='pay()'>OK</button>");
+                        }
+                      //Do Something
+                    },
+                    error: function(xhr) {
+                      //Do Something to handle error
+                    }
+                });
             });
+            var pay=function() {
+                $.ajax({
+                    url: "http://localhost:8084/BookRead/webresources/transaction/completeTransaction/"+data.trans_id,
+                    type: "POST", //send it through get method
+                    data:{trans_details:'{"test1":"test"}'},
+                    success: function(response) {
+                        console.log("Taha ur Awesomest!!",response);
+                        if(response.flag===0){
+                            $("#main").empty();
+                            $("#main").append("<h3>Sorry this transaction failed. Please try again</h3>");
+                        } else {
+                            window.location.href = response.redirect_url;
+                        }
+                      //Do Something
+                    },
+                    error: function(xhr) {
+                      //Do Something to handle error
+                    }
+                });
+            }
         </script>
         <%
         }

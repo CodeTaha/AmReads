@@ -6,6 +6,7 @@
 package com.bookread.config;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.beans.Statement;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -55,7 +58,7 @@ public class Models {
             int client_id,
             String client_secret,
             int amount, 
-            String redirect_url) throws NoSuchAlgorithmException{
+            String redirect_url){
            
       
         try {
@@ -78,9 +81,77 @@ public class Models {
         }
     }
     
-    private String hashString() throws NoSuchAlgorithmException{
-        SecureRandom random = new SecureRandom();
+    private String hashString(){
+        try {
+            SecureRandom random = new SecureRandom();
+            return new BigInteger(130, random).toString(32);
+        } catch(Exception e){
+            return "testurl";
+        }
+        
+    }
 
-        return new BigInteger(130, random).toString(32);
+    public String getTransactionData(String activation_url) {
+        try {
+            System.out.println(" act_url="+activation_url);
+            
+            String query = "SELECT * FROM transactions where activation_url=? and flag=0 limit 1";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, activation_url);
+            ResultSet rs=preparedStmt.executeQuery();
+            if (rs.next())
+            {
+                JsonObject res = new JsonObject();
+                res.addProperty("trans_id", rs.getInt("Transaction_id"));
+                res.addProperty("client_id", rs.getInt("client_id"));
+                res.addProperty("flag", rs.getInt("flag"));
+                //res.addProperty("flag", 1);
+                res.addProperty("amount", rs.getInt("amount"));
+                //res.addProperty("redirect_url", rs.getString("red_url"));
+                System.out.println("Search"+gson.toJson(res));
+                
+                return gson.toJson(res);
+            }
+            System.out.println("Flag or transaction not found");
+            return "{\"flag\":1}";
+        } catch (SQLException ex) {
+            Logger.getLogger(Models.class.getName()).log(Level.SEVERE, null, ex);
+            return "{\"flag\":1}";
+        }
+    }
+
+    public String commitTransaction(int trans_id) {
+        try {
+            System.out.println(" trans_id="+trans_id);
+    //UPDATE transactions SET flag=1 WHERE Transaction_id=6;        
+            String query = "UPDATE transactions SET flag=1 WHERE Transaction_id=?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, trans_id);
+            int updated=preparedStmt.executeUpdate();
+            System.out.println("updated="+updated);
+            query = "SELECT * FROM transactions where Transaction_id=?";
+            preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, trans_id);
+            
+            ResultSet rs=preparedStmt.executeQuery();
+            if (rs.next())
+            {
+                JsonObject res = new JsonObject();
+                res.addProperty("trans_id", rs.getInt("Transaction_id"));
+                res.addProperty("client_id", rs.getInt("client_id"));
+                res.addProperty("flag", rs.getInt("flag"));
+                //res.addProperty("flag", 1);
+                res.addProperty("amount", rs.getInt("amount"));
+                res.addProperty("redirect_url", rs.getString("red_url"));
+                System.out.println("Search"+gson.toJson(res));
+                
+                return gson.toJson(res);
+            }
+            System.out.println("Flag or transaction not found");
+            return "{\"flag\":0}";
+        } catch (SQLException ex) {
+            Logger.getLogger(Models.class.getName()).log(Level.SEVERE, null, ex);
+            return "{\"flag\":0}";
+        }
     }
 }
