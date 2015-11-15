@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/taha/NetBeansProjects/BookRead/src/java/com/bookread/rs/ApplicationConfig.java</file>
             <file>file:/home/taha/NetBeansProjects/BookRead/web/index.jsp</file>
             <file>file:/home/taha/NetBeansProjects/BookRead/src/java/com/bookread/config/Models.java</file>
+            <file>file:/home/taha/NetBeansProjects/BookRead/src/java/com/bookread/ws/transaction.java</file>
             <file>file:/home/taha/NetBeansProjects/BookRead/src/java/com/bookread/rs/TransactionResource.java</file>
         </group>
     </open-files>

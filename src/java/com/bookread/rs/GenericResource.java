@@ -37,9 +37,9 @@ public class GenericResource {
      */
     @GET
     @Produces("application/json")
-    public String getJson() {
+    public String getXml() {
         //TODO return proper representation object
-        return "sdsdsd";
+        return "{\"taha\":\"Just work\"}";
     }
 
     /**
@@ -48,7 +48,7 @@ public class GenericResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @PUT
-    @Consumes("application/json")
-    public void putJson(String content) {
+    @Consumes("application/xml")
+    public void putXml(String content) {
     }
 }

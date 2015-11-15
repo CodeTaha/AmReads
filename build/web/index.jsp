@@ -38,7 +38,7 @@
                         if(data.flag==1) {
                             $("#main").append("<h3>Sorry this transaction does not exist, please contact your merchant</h3>");
                         } else {
-                            $("#main").append("Press ok to pay $"+data.amount+" to "+data.client_id);
+                            $("#main").append("Press ok to pay $"+data.amount+" to "+data.client_id+"-"+data.client_name);
                             $("#main").append("</br><button onclick='pay()'>OK</button>");
                         }
                       //Do Something
