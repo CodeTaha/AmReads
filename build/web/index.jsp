@@ -33,7 +33,6 @@
                     url: "http://localhost:8084/BookRead/webresources/transaction/getTransaction/"+act_url,
                     type: "GET", //send it through get method
                     success: function(response) {
-                        console.log("Taha ur Awesome",response);
                         data=response;
                         if(data.flag==1) {
                             $("#main").append("<h3>Sorry this transaction does not exist, please contact your merchant</h3>");
@@ -54,7 +53,6 @@
                     type: "POST", //send it through get method
                     data:{trans_details:'{"test1":"test"}'},
                     success: function(response) {
-                        console.log("Taha ur Awesomest!!",response);
                         if(response.flag===0){
                             $("#main").empty();
                             $("#main").append("<h3>Sorry this transaction failed. Please try again</h3>");

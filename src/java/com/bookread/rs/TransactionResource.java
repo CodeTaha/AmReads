@@ -7,6 +7,7 @@ package com.bookread.rs;
 
 import com.bookread.config.Models;
 import java.security.NoSuchAlgorithmException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -14,6 +15,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
@@ -23,6 +25,7 @@ import javax.ws.rs.QueryParam;
  * @author taha
  */
 @Path("transaction")
+@Consumes({"text/plain,text/html,application/x-www-form-urlencoded"})
 public class TransactionResource {
 
     @Context
@@ -54,6 +57,7 @@ public class TransactionResource {
     @POST
     @Path("/registerMerchant")
     @Produces("application/json")
+    @Consumes("application/x-www-form-urlencoded")
     public String registerMerchant(
             @DefaultValue("client_name") @QueryParam("client_name") String client_name,
             @DefaultValue("mosh") @QueryParam("website") String website,
@@ -77,6 +81,7 @@ public class TransactionResource {
     @POST
     @Path("/createTransaction/{client_id}")
     @Produces("application/json")
+    @Consumes("application/x-www-form-urlencoded")
     public String createTransaction(@PathParam("client_id") int client_id,
             @DefaultValue("0") @QueryParam("amount") int amount,
             @DefaultValue("clientsecret") @QueryParam("client_secret") String client_secret,
@@ -114,6 +119,7 @@ public class TransactionResource {
     @POST
     @Path("/completeTransaction/{trans_id}")
     @Produces("application/json")
+    @Consumes("application/x-www-form-urlencoded")
     public String completeTransaction(@PathParam("trans_id") int trans_id,
             @DefaultValue("{\"trans_details\":0}") @QueryParam("trans_details") String trans_details) throws NoSuchAlgorithmException {
         System.out.println("trans_details"+trans_details);
