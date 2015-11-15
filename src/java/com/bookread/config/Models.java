@@ -8,20 +8,15 @@ package com.bookread.config;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.beans.Statement;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 /**
  *
@@ -31,11 +26,12 @@ public class Models {
     final String Base_Url="http://localhost:8084/BookRead/index.jsp?trans=";
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
     static final String DB_URL = "jdbc:mysql://localhost/azread";
+    
+    static final String USER = "root";
+    static final String PASS = "root123";
     Statement stmt = null;
     Connection conn = null;
     //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "root123";
     Gson gson=new Gson();
     public Models() {
         try{
