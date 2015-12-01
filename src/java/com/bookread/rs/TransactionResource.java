@@ -83,7 +83,7 @@ public class TransactionResource {
     @Produces("application/json")
     @Consumes("application/x-www-form-urlencoded")
     public String createTransaction(@PathParam("client_id") int client_id,
-            @DefaultValue("0") @QueryParam("amount") int amount,
+            @DefaultValue("0") @QueryParam("amount") Double amount,
             @DefaultValue("clientsecret") @QueryParam("client_secret") String client_secret,
             @DefaultValue("www.yellowkorp.com") @QueryParam("redirect_url") String redirect_url) throws NoSuchAlgorithmException {
         System.out.println("ci="+client_id+" "+client_secret+" "+amount+" "+redirect_url+ " ");

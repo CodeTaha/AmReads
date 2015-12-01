@@ -146,6 +146,74 @@ public class AmazonClientResource implements configAWS{
     return "{\"error\":\"No Reviews\"}";
     }
   }
+   /**
+   * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
+   * @param isbn
+   * @param amount
+   * @param details
+   * @return an instance of java.lang.String
+   * @throws java.net.MalformedURLException
+   */
+  @GET
+  @Produces("application/json")
+  @Path("/getBuy")
+  public String getBuy(
+          @DefaultValue("0") @QueryParam("isbn") String isbn,
+          @DefaultValue("0") @QueryParam("amount") Double amount,
+          @DefaultValue("No Details") @QueryParam("details") String details
+  ) throws MalformedURLException {
+    try {
+      System.out.println(isbn+" "+ amount);
+      String redirect_url= new AmModel().createPurchase(amount, isbn, details);
+      String url="http://localhost:8084/AmRead/webresources/transaction/createTransaction/"+AmReads_client_id+"?client_secret="+AmReads_client_secret+"&amount="+amount+"&redirect_url="+redirect_url;
+      URL obj = new URL(url);
+      HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+      
+      // optional default is GET
+      con.setRequestMethod("POST");
+      
+      //add request header
+      con.setRequestProperty("User-Agent", "Mozilla/5.0");
+      
+      int responseCode = con.getResponseCode();
+      System.out.println("\nSending 'GET' request to URL : " + url);
+      System.out.println("Response Code : " + responseCode);
+      if(responseCode!=200){
+        return "{\"error\":\"No Reviews\"}";
+      }
+      StringBuffer response;
+      try (BufferedReader in = new BufferedReader(
+              new InputStreamReader(con.getInputStream()))) {
+        String inputLine;
+        response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine);
+        }
+      }
+      System.out.println("Successful"+response.toString());
+      return response.toString();
+    } catch (IOException ex) {
+      Logger.getLogger(AmazonClientResource.class.getName()).log(Level.SEVERE, null, ex);
+      return "{\"error\":\"Could Not create Transaction\"}";
+    }
+  };
+  
+   /**
+     * Retrieves representation of an instance of com.bookread.rs.TransactionResource
+     * @param activation_url
+     * @return an instance of java.lang.String
+     * @throws java.security.NoSuchAlgorithmException
+     */
+    @GET
+    @Path("/completePurchase/{activation_url}")
+    @Produces("application/json")
+    public String getTransaction(@PathParam("activation_url") String activation_url) throws NoSuchAlgorithmException {
+        
+        System.out.println("ci="+activation_url);
+        AmModel ammodel = new AmModel();
+        return ammodel.completePurchase(activation_url);
+        //return "{\"transaction_url\":\""+activation_url+"\"}";
+    }
   /**
    * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
    * @return an instance of java.lang.String

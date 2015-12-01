@@ -58,7 +58,7 @@ public class transaction {
     @WebMethod(operationName = "createTransaction")
     public String createTransactionWS(
             @WebParam(name = "client_id") int client_id,
-            @WebParam(name = "amount") int amount,
+            @WebParam(name = "amount") Double amount,
             @WebParam(name = "client_secret") String client_secret,
             @WebParam(name = "redirect_url") String redirect_url
             ) {

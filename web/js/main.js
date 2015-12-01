@@ -16,7 +16,6 @@ $(document).ready(function() {
       $.ajax({
         url: "webresources/amazonClient/itemSearch?keywords="+$("#searchBox").val(),
         type: "POST", //send it through POST method
-        data:{keywords:$("#searchBox").val()},
         success: function(response) {
           console.log("response=",response);
           createDivs(response.ItemSearchResponse.Items);
@@ -33,7 +32,7 @@ $(document).ready(function() {
           <div class=\"caption\">\n\
             <h3>{{title}}</h3>\n\
             <p>Price: {{list_price}}</p>\n\
-            <p><a href=\"#\" class=\"btn btn-success\" role=\"button\">Button</a>\n\
+            <p><button type=\"button\" class=\"btn btn-success\" role=\"button\" onclick=buy(\"{{ISBN}}\",\"{{list_price}}\")>Buy</button>\n\
               <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\" onclick=\"fillModal('#fillm_{{ISBN}}')\" id='fillm_{{ISBN}}'>\n\
                 More..\n\
               </button>\n\
@@ -43,9 +42,9 @@ $(document).ready(function() {
       </div>");
       $("#container").empty();
       data.Item.forEach(function(item){
-        //console.log(item);
-        var ListPrice = typeof item.ItemAttributes.FormattedPrice !== 'undefined' ? item.ItemAttributes.ListPrice.Amount : "N/A";
-        
+        console.log(item);
+        var ListPrice = typeof item.ItemAttributes.ListPrice !== 'undefined' ? item.ItemAttributes.ListPrice.FormattedPrice : "N/A";
+        var ISBN = typeof item.ItemAttributes.ListPrice !== 'undefined' ? item.ItemAttributes.ListPrice.FormattedPrice : "N/A";
         $("#container").append(template2({
           title: item.ItemAttributes.Title,
           img_url:item.MediumImage.URL,
@@ -53,7 +52,7 @@ $(document).ready(function() {
           ISBN: item.ItemAttributes.ISBN//JSON.stringify(item)
         }));
         $("#fillm_"+item.ItemAttributes.ISBN).data(item);
-        //console.log("#fillm_"+item.ItemAttributes.ISBN)
+        console.log("#fillm_"+item.ItemAttributes.ISBN)
       });
     };
     
@@ -63,7 +62,7 @@ $(document).ready(function() {
       var goodread;
       $("#myModalLabel").html(item.ItemAttributes.Title);
       $.ajax({
-        url: "http://localhost:8084/BookRead/webresources/amazonClient/getreview/"+item.ItemAttributes.ISBN,
+        url: "webresources/amazonClient/getreview/"+item.ItemAttributes.ISBN,
         type: "GET",
         success: function(gread) {
           goodread=gread;
@@ -96,8 +95,26 @@ $(document).ready(function() {
             </div>\n\
             <div class="modal-footer">\n\
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n\
-              <button type="button" class="btn btn-primary">Save changes</button>\n\
+              <button type="button" class="btn btn-success" onclick=buy("{{list_price}}","{{isbn}}")>Buy</button>\n\
             </div>');
       $("#myModalBody").empty();
       
     };
+    
+var buy = function (isbn, amount){
+  console.log("buy", isbn,amount);
+  if(amount==="N/A"){
+    alert("Sorry this product cannot be purchased");
+    return;
+  } else {
+    $.ajax({
+      url: "webresources/amazonClient/getBuy?isbn="+isbn+"&amount="+amount.slice(1),
+      type: "GET",
+      success: function(data) {
+        //TODO redirect after recieving url
+        console.log(data);
+        window.location.href = data.transaction_url;
+      }
+    });
+  }
+};

@@ -5,6 +5,7 @@
       <implementation-class>com.bookread.ws.transaction</implementation-class>
     </service>
   </services>
-  <clients/>
+  <clients>
+  </clients>
   <jsr109>false</jsr109>
 </jax-ws>

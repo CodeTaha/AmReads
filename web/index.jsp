@@ -30,7 +30,7 @@
             var data;
             $(document).ready(function() {
                 $.ajax({
-                    url: "http://localhost:8084/BookRead/webresources/transaction/getTransaction/"+act_url,
+                    url: "webresources/transaction/getTransaction/"+act_url,
                     type: "GET", //send it through get method
                     success: function(response) {
                         data=response;
@@ -49,7 +49,7 @@
             });
             var pay=function() {
                 $.ajax({
-                    url: "http://localhost:8084/BookRead/webresources/transaction/completeTransaction/"+data.trans_id,
+                    url: "webresources/transaction/completeTransaction/"+data.trans_id,
                     type: "POST", //send it through get method
                     data:{trans_details:'{"test1":"test"}'},
                     success: function(response) {
