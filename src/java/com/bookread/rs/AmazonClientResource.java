@@ -1,12 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.bookread.rs;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import fi.aalto.t_75_5300.bank.TransactionException_Exception;
+import fi.aalto.t_75_5300.bank.TransactionResult;
+import fi.aalto.t_75_5300.bank.VisaCard;
+import fi.aalto.t_75_5300.bank.VisaTransaction;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -44,29 +48,29 @@ import org.json.XML;
  */
 @Path("amazonClient")
 public class AmazonClientResource implements configAWS{
-    
-    /*
-     * Set up the signed requests helper.
-     */
+  
+  /*
+  * Set up the signed requests helper.
+  */
   Gson gson = new Gson();
   private SignedRequestsHelper helper;
   String requestUrl = null;
   @Context
   private UriInfo context;
-
+  
   /**
    * Creates a new instance of AmazonClientResource
    */
   public AmazonClientResource() {
-     try {
-          helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
-            System.out.println("Helper created successfully");
-     } catch (IllegalArgumentException | UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
-       Logger.getLogger(AmazonClientResource.class.getName()).log(Level.SEVERE, null, e);
-     }
-            
-
-        
+    try {
+      helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
+      System.out.println("Helper created successfully");
+    } catch (IllegalArgumentException | UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
+      Logger.getLogger(AmazonClientResource.class.getName()).log(Level.SEVERE, null, e);
+    }
+    
+    
+    
   }
   /**
    * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
@@ -84,7 +88,7 @@ public class AmazonClientResource implements configAWS{
     //TODO return proper representation object
     try{
       Map<String, String> params = new HashMap<String, String>();
-
+      
       params.put("Service", "AWSECommerceService");
       params.put("Operation", "ItemSearch");
       params.put("AWSAccessKeyId", AWS_ACCESS_KEY_ID);
@@ -93,9 +97,9 @@ public class AmazonClientResource implements configAWS{
       params.put("Keywords", keywords);
       params.put("ResponseGroup", "Images,ItemAttributes, OfferSummary");
       params.put("Sort", SortBy);
-
+      
       requestUrl = helper.sign(params);
-
+      
       System.out.println("Signed URL: \"" + requestUrl + "\"");
       return sendGet(requestUrl);
     } catch (Exception e){
@@ -114,39 +118,39 @@ public class AmazonClientResource implements configAWS{
   public String getreview(@PathParam("isbn") String isbn) {
     String url="http://www.goodreads.com/book/isbn?format=json&isbn="+isbn+"&key="+GoodReadKey;
     try{
-    URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		// optional default is GET
-		con.setRequestMethod("GET");
-
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-    if(responseCode!=200){
-      return "{\"error\":\"No Reviews\"}";
-    }
-    StringBuffer response;
-    try (BufferedReader in = new BufferedReader(
-            new InputStreamReader(con.getInputStream()))) {
-      String inputLine;
-      response = new StringBuffer();
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
+      URL obj = new URL(url);
+      HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+      
+      // optional default is GET
+      con.setRequestMethod("GET");
+      
+      //add request header
+      con.setRequestProperty("User-Agent", "Mozilla/5.0");
+      
+      int responseCode = con.getResponseCode();
+      System.out.println("\nSending 'GET' request to URL : " + url);
+      System.out.println("Response Code : " + responseCode);
+      if(responseCode!=200){
+        return "{\"error\":\"No Reviews\"}";
       }
-    }
-    String resp = response.toString();
-    //System.out.println("GR json"+resp);
-    return resp;
+      StringBuffer response;
+      try (BufferedReader in = new BufferedReader(
+              new InputStreamReader(con.getInputStream()))) {
+        String inputLine;
+        response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine);
+        }
+      }
+      String resp = response.toString();
+      //System.out.println("GR json"+resp);
+      return resp;
     } catch(Exception e){
       System.out.println(e);
-    return "{\"error\":\"No Reviews\"}";
+      return "{\"error\":\"No Reviews\"}";
     }
   }
-   /**
+  /**
    * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
    * @param isbn
    * @param amount
@@ -198,22 +202,25 @@ public class AmazonClientResource implements configAWS{
     }
   };
   
-   /**
-     * Retrieves representation of an instance of com.bookread.rs.TransactionResource
-     * @param activation_url
-     * @return an instance of java.lang.String
-     * @throws java.security.NoSuchAlgorithmException
-     */
-    @GET
-    @Path("/completePurchase/{activation_url}")
-    @Produces("application/json")
-    public String getTransaction(@PathParam("activation_url") String activation_url) throws NoSuchAlgorithmException {
-        
-        System.out.println("ci="+activation_url);
-        AmModel ammodel = new AmModel();
-        return ammodel.completePurchase(activation_url);
-        //return "{\"transaction_url\":\""+activation_url+"\"}";
-    }
+  /**
+   * Retrieves representation of an instance of com.bookread.rs.TransactionResource
+   * @param activation_url
+   * @return an instance of java.lang.String
+   * @throws java.security.NoSuchAlgorithmException
+   */
+  @GET
+  @Path("/completePurchase/{activation_url}")
+  @Produces("application/json")
+  public String getTransaction(@PathParam("activation_url") String activation_url) throws NoSuchAlgorithmException {
+    
+    System.out.println("ci="+activation_url);
+    AmModel ammodel = new AmModel();
+    return ammodel.completePurchase(activation_url);
+    
+    //return "{\"transaction_url\":\""+activation_url+"\"}";
+  }
+  
+  
   /**
    * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
    * @return an instance of java.lang.String
@@ -225,7 +232,7 @@ public class AmazonClientResource implements configAWS{
     return "";
   }
   
-
+  
   /**
    * PUT method for updating or creating an instance of AmazonClientResource
    * @param content representation for the resource
@@ -234,24 +241,24 @@ public class AmazonClientResource implements configAWS{
   @Consumes("application/json")
   public void putJson(String content) {
   }
-  /* 
-    For sendng remote GET requests to Amazon
+  /*
+  For sendng remote GET requests to Amazon
   */
   public String sendGet(String url) throws Exception {
-
-		
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		// optional default is GET
-		con.setRequestMethod("GET");
-
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+    
+    
+    URL obj = new URL(url);
+    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+    
+    // optional default is GET
+    con.setRequestMethod("GET");
+    
+    //add request header
+    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+    
+    int responseCode = con.getResponseCode();
+    System.out.println("\nSending 'GET' request to URL : " + url);
+    System.out.println("Response Code : " + responseCode);
     
     StringBuffer response;
     try (BufferedReader in = new BufferedReader(
@@ -262,10 +269,10 @@ public class AmazonClientResource implements configAWS{
         response.append(inputLine);
       }
     }
-
-		//print result
+    
+    //print result
     String respXML = response.toString();
-		//System.out.println("XML op"+respXML);
+    //System.out.println("XML op"+respXML);
     try {
       JSONObject JSONObj = XML.toJSONObject(respXML);
       
@@ -276,6 +283,40 @@ public class AmazonClientResource implements configAWS{
       System.out.println("Not that great"+e);
       return "Failed";
     }
-	}
+  }
+  /**
+   * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
+   * @return an instance of java.lang.String
+   */
+  @GET
+  @Path("/getBuy2")
+  @Produces("application/json")
+  public String getBuy2() {
+    System.out.println("Implementing external Bank");
+    VisaCard vcard = new VisaCard();
+    vcard.setCsv("333");
+    vcard.setNumber("4111111111111111");
+    vcard.setOwner("T K");
+    vcard.setValidMonth(5);
+    vcard.setValidYear(2016);
+    VisaTransaction bank2= new VisaTransaction();
+    bank2.setAmountInCents(100);
+    bank2.setCard(vcard);
+    bank2.setTargetIBAN("FR14 2004 1010 0505 0001 3M02 606");
+    bank2.setTransactionMessage("Transaction Successful of AmReads");
+    try {
+      TransactionResult tr=makeVisaTransaction(bank2);
+      return gson.toJson(tr);
+    } catch (TransactionException_Exception ex) {
+      Logger.getLogger(AmazonClientResource.class.getName()).log(Level.SEVERE, null, ex);
+      System.out.println("Bank2 error="+ex);
+      return "{\"error\":\""+ex+"\"}";
+    }
+  }
 
+  private static TransactionResult makeVisaTransaction(fi.aalto.t_75_5300.bank.VisaTransaction arg0) throws TransactionException_Exception {
+    fi.aalto.t_75_5300.bank.TransactionService service = new fi.aalto.t_75_5300.bank.TransactionService();
+    fi.aalto.t_75_5300.bank.Transactions port = service.getTransactionsPort();
+    return port.makeVisaTransaction(arg0);
+  }
 }

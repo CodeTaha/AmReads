@@ -2,4 +2,9 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl" uri="src/conf/xml-resources/web-service-references/AWSECommerceService/wsdl/webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl"/>
     <system systemId="http://demo.seco.tkk.fi/ws/3/WebServices/bank?WSDL" uri="src/conf/xml-resources/web-service-references/bank/wsdl/demo.seco.tkk.fi/ws/3/WebServices/bank.wsdl"/>
+    <system systemId="http://demo.seco.tkk.fi/ws/1/WebServices/bank?WSDL" uri="src/conf/xml-resources/web-service-references/bank/wsdl/demo.seco.tkk.fi/ws/1/WebServices/bank.wsdl"/>
+    <system systemId="http://demo.seco.tkk.fi/ws/5/?wsdl" uri="src/conf/xml-resources/web-service-references/WsClient/wsdl/demo.seco.tkk.fi/ws/5/.wsdl"/>
+    <system systemId="http://demo.seco.tkk.fi/ws/8/service/bankTransfer?WSDL" uri="src/conf/xml-resources/web-service-references/bankTransfer/wsdl/demo.seco.tkk.fi/ws/8/service/bankTransfer.wsdl"/>
+    <system systemId="http://demo.seco.tkk.fi/ws/6/t755300bank/services/v1/transactions?wsdl" uri="src/conf/xml-resources/web-service-references/transactions/wsdl/demo.seco.tkk.fi/ws/6/t755300bank/services/v1/transactions.wsdl"/>
+    <system systemId="file:/home/taha/Downloads/transactions6.wsdl" uri="src/conf/xml-resources/web-service-references/transactions6/wsdl/transactions6.wsdl"/>
 </catalog>
