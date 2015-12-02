@@ -284,39 +284,5 @@ public class AmazonClientResource implements configAWS{
       return "Failed";
     }
   }
-  /**
-   * Retrieves representation of an instance of com.bookread.rs.AmazonClientResource
-   * @return an instance of java.lang.String
-   */
-  @GET
-  @Path("/getBuy2")
-  @Produces("application/json")
-  public String getBuy2() {
-    System.out.println("Implementing external Bank");
-    VisaCard vcard = new VisaCard();
-    vcard.setCsv("333");
-    vcard.setNumber("4111111111111111");
-    vcard.setOwner("T K");
-    vcard.setValidMonth(5);
-    vcard.setValidYear(2016);
-    VisaTransaction bank2= new VisaTransaction();
-    bank2.setAmountInCents(100);
-    bank2.setCard(vcard);
-    bank2.setTargetIBAN("FR14 2004 1010 0505 0001 3M02 606");
-    bank2.setTransactionMessage("Transaction Successful of AmReads");
-    try {
-      TransactionResult tr=makeVisaTransaction(bank2);
-      return gson.toJson(tr);
-    } catch (TransactionException_Exception ex) {
-      Logger.getLogger(AmazonClientResource.class.getName()).log(Level.SEVERE, null, ex);
-      System.out.println("Bank2 error="+ex);
-      return "{\"error\":\""+ex+"\"}";
-    }
-  }
-
-  private static TransactionResult makeVisaTransaction(fi.aalto.t_75_5300.bank.VisaTransaction arg0) throws TransactionException_Exception {
-    fi.aalto.t_75_5300.bank.TransactionService service = new fi.aalto.t_75_5300.bank.TransactionService();
-    fi.aalto.t_75_5300.bank.Transactions port = service.getTransactionsPort();
-    return port.makeVisaTransaction(arg0);
-  }
+  
 }
