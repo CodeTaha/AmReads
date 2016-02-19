@@ -42,7 +42,7 @@ $(document).ready(function() {
       </div>");
       $("#container").empty();
       data.Item.forEach(function(item){
-        console.log(item);
+        //console.log(item);
         var ListPrice = typeof item.ItemAttributes.ListPrice !== 'undefined' ? item.ItemAttributes.ListPrice.FormattedPrice : "N/A";
         var ISBN = typeof item.ItemAttributes.ListPrice !== 'undefined' ? item.ItemAttributes.ListPrice.FormattedPrice : "N/A";
         $("#container").append(template2({
@@ -52,7 +52,7 @@ $(document).ready(function() {
           ISBN: item.ItemAttributes.ISBN//JSON.stringify(item)
         }));
         $("#fillm_"+item.ItemAttributes.ISBN).data(item);
-        console.log("#fillm_"+item.ItemAttributes.ISBN)
+        //console.log("#fillm_"+item.ItemAttributes.ISBN)
       });
     };
     
@@ -66,7 +66,7 @@ $(document).ready(function() {
         type: "GET",
         success: function(gread) {
           goodread=gread;
-          console.log("goodread=",goodread);
+          //console.log("goodread=",goodread);
           $("#myModalBody").append(template3({
           img_url:  item.MediumImage.URL,
           list_price: ListPrice,
@@ -95,7 +95,7 @@ $(document).ready(function() {
             </div>\n\
             <div class="modal-footer">\n\
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n\
-              <button type="button" class="btn btn-success" onclick=buy("{{list_price}}","{{isbn}}")>Buy</button>\n\
+              <button type="button" class="btn btn-success" onclick=buy("{{isbn}}","{{list_price}}")>Buy</button>\n\
             </div>');
       $("#myModalBody").empty();
       
@@ -107,6 +107,7 @@ var buy = function (isbn, amount){
     alert("Sorry this product cannot be purchased");
     return;
   } else {
+      console.log("amount",amount, amount.slice(1))
     $.ajax({
       url: "webresources/amazonClient/getBuy?isbn="+isbn+"&amount="+amount.slice(1),
       type: "GET",

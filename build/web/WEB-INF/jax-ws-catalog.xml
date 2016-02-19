@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl" uri="wsdl/webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl"/>
-    <system systemId="http://demo.seco.tkk.fi/ws/6/t755300bank/services/v1/transactions?wsdl" uri="wsdl/demo.seco.tkk.fi/ws/6/t755300bank/services/v1/transactions.wsdl"/>
-    <system systemId="file:/home/taha/Downloads/transactions6.wsdl" uri="wsdl/transactions6.wsdl"/>
-</catalog>

@@ -23,12 +23,12 @@ import java.sql.ResultSet;
  * @author taha
  */
 public class Models {
-  final String Base_Url="http://localhost:8084/AmRead/index.jsp?trans=";
+  final String Base_Url="/AmRead/transaction.jsp?trans=";
   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
   static final String DB_URL = "jdbc:mysql://localhost/azread";
   
   static final String USER = "root";
-  static final String PASS = "root123";
+  static final String PASS = "root123";//"Pollikan290592";
   Statement stmt = null;
   Connection conn = null;
   //  Database credentials
